@@ -1,0 +1,21 @@
+
+.chessboard {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+}
+
+.board-row {
+  display: flex;
+}
+
+.board-row:nth-child(odd) div:nth-child(odd),
+.board-row:nth-child(even) div:nth-child(even) {
+  background-color: #f0d9b5; /* Light square color */
+}
+
+.board-row:nth-child(odd) div:nth-child(even),
+.board-row:nth-child(even) div:nth-child(odd) {
+  background-color: #b58863; /* Dark square color */
+}
+
