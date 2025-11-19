@@ -29,7 +29,7 @@ const AgainstStockfish = () => {
   const fetchBestMove = async (FEN) => {
     try {
       const response = await axios.get(
-        "https://reactchess.onrender.com/stockfish",
+        "http://localhost:3000/stockfish",
         {
           params: {
             fen: FEN,
@@ -84,7 +84,7 @@ const AgainstStockfish = () => {
       let move = game.move({
         from: source,
         to: target,
-        promotion: promotionPiece, // Use the selected promotion piece
+        promotion: promotionPiece,
       });
 
       if (move === null) return "snapback";
@@ -92,42 +92,50 @@ const AgainstStockfish = () => {
       setMoves((prevMoves) => [...prevMoves, { from: move.from, to: move.to }]);
       updateStatus();
 
-      // Play sound based on move type
-      if (move.captured) {
-        captureSound.play();
-      } else {
-        moveSound.play();
-      }
-
+      // 🔥 AI move (Black)
       if (game.turn() === "b") {
         try {
           const fen = game.fen();
-          console.log(fen);
-
           const bestMoveResponse = await fetchBestMove(fen);
 
           if (bestMoveResponse) {
-            console.log(bestMoveResponse);
-            const bestMove = bestMoveResponse.split(" ")[1].trim();
+            let bestMove = bestMoveResponse
+              .toLowerCase()
+              .replace("bestmove", "")
+              .trim()
+              .split(" ")[0];
 
-            move = game.move({
-              from: bestMove.slice(0, 2),
-              to: bestMove.slice(2, 4),
-              promotion: promotionPiece, // Use the selected promotion piece
-            });
+            if (bestMove.length >= 4) {
+              move = game.move({
+                from: bestMove.slice(0, 2),
+                to: bestMove.slice(2, 4),
+                promotion: promotionPiece,
+              });
+            }
 
-            if (move !== null) {
+            if (move) {
               setMoves((prevMoves) => [
                 ...prevMoves,
                 { from: move.from, to: move.to },
               ]);
               boardRef.current.position(game.fen());
+
+              if (move.captured) captureSound.play();
+              else moveSound.play();
+
               updateStatus();
             }
           }
         } catch (error) {
           console.error("Error fetching move from stockfish:", error);
         }
+      }
+
+      // Play sound based on move type
+      if (move.captured) {
+        captureSound.play();
+      } else {
+        moveSound.play();
       }
     };
 
@@ -212,7 +220,9 @@ const AgainstStockfish = () => {
         boardRef.current.destroy();
       }
     };
-  }, [promotionPiece]);
+}, [promotionPiece]);
+
+
 
   const toggleTable = () => {
     setIsTableCollapsed(!isTableCollapsed);
