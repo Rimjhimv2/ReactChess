@@ -18,8 +18,7 @@ const app = express();
 const httpServer = createServer(app);
 
 const corsOptions = {
-  origin: ["https://react-chess-ho8x-3u4y8cyja-rimjhim-s-projects-18cc8be9.vercel.app","react-chess-ho8x-git-master-rimjhim-s-projects-18cc8be9.vercel.app","react-chess-ho8x.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: "*",
   credentials: true,
 };
 
@@ -55,7 +54,7 @@ app.get("*", (req, res) => {
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["https://react-chess-ho8x-3u4y8cyja-rimjhim-s-projects-18cc8be9.vercel.app","react-chess-ho8x-git-master-rimjhim-s-projects-18cc8be9.vercel.app","react-chess-ho8x.vercel.app"],
+    origin: "*",
   }
 });
 
