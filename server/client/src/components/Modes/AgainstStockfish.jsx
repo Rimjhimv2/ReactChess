@@ -137,7 +137,7 @@ const AgainstStockfish = () => {
     //   } else {
     //     moveSound.play();
     //   }
-    // };
+     };
 
     const onMouseoverSquare = (square, piece) => {
       const moves = game.moves({
