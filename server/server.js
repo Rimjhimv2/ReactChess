@@ -1,219 +1,219 @@
-// const createServer = require("http").createServer;
-// const { Server } = require('socket.io');
-// const express = require('express');
-// const cors = require('cors');
-// const dotenv = require('dotenv');
-// const axios = require('axios');
-// const userRoutes = require("./routes/userRoutes.js");
-// const cookieParser = require("cookie-parser");
-// const { restrictToLoginUserOnly } = require("./middlewares/auth.js");
-// const path = require("path")
-// dotenv.config();
-// const dbConnector = require('./config/connect.js');
-// const profileRoutes = require("./routes/profileRoutes.js");
-// dbConnector();
-
-// const port = process.env.PORT || 3000;
-// const app = express();
-// const httpServer = createServer(app);
-
-// const corsOptions = {
-//   origin: "https://react-chess-lac.vercel.app",
-//   credentials: true,
-// };
-
-
-// app.use(cors(corsOptions));
-// app.use(express.json());
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, "/client/dist")));
-
-// app.use("/user", userRoutes);
-// app.use('/profile', restrictToLoginUserOnly, profileRoutes);
-
-// app.get("/stockfish", async (req, res) => {
-//   try {
-//     const apiUrl = "https://stockfish.online/api/s/v2.php";
-//     const response = await axios.get(apiUrl, {
-//       params: req.query
-//     });
-//     const bestMove = response.data.bestmove;
-//     res.json({
-//       bestMove: bestMove
-//     });
-//   } catch (error) {
-//     res.status(500).send(`Error: ${error.message}`);
-//   }
-// });
-
-// // Wildcard route for SPA (Single Page Application)
-// // This should be the last route to catch all other routes
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/client/dist/index.html"));
-// });
-
-// const io = new Server(httpServer, {
-//   cors: {
-//     origin: "https://react-chess-lac.vercel.app",
-//   }
-// });
-
-// let pendingUser = null;
-
-// io.on('connection', (socket) => {
-//   console.log(socket);
-//   const user = JSON.parse(socket.handshake.query.user);
-
-//   if (pendingUser) {
-//     const player1 = pendingUser;
-//     const player2 = socket;
-
-//     player1.emit('color', 'white');
-//     player2.emit('color', 'black');
-
-//     player1.emit('opponent', user);
-//     player2.emit('opponent', JSON.parse(player1.handshake.query.user));
-
-//     pendingUser = null;
-
-//     player1.on('move', ({ from, to ,obtainedPromotion}) => {
-//       player2.emit('move', { from, to ,obtainedPromotion});
-//     });
-
-//     player2.on('move', ({ from, to , obtainedPromotion}) => {
-//       player1.emit('move', { from, to, obtainedPromotion });
-//     });
-
-//     player1.on('disconnect', () => {
-//       player2.emit('opponentDisconnected');
-//     });
-
-//     player2.on('disconnect', () => {
-//       player1.emit('opponentDisconnected');
-//     });
-//   } else {
-//     pendingUser = socket;
-//     socket.emit('waiting', true);
-
-//     socket.on('disconnect', () => {
-//       pendingUser = null;
-//     });
-//   }
-// });
-
-// httpServer.listen(port, () => {
-//   console.log(`Server started at succesfully`);
-// });
-
-// server.js
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const axios = require("axios");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-
-dotenv.config();
-
-// Import your routes and middleware
+const createServer = require("http").createServer;
+const { Server } = require('socket.io');
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const axios = require('axios');
 const userRoutes = require("./routes/userRoutes.js");
-const profileRoutes = require("./routes/profileRoutes.js");
+const cookieParser = require("cookie-parser");
 const { restrictToLoginUserOnly } = require("./middlewares/auth.js");
-const dbConnector = require("./config/connect.js");
-
-// Connect to database
+const path = require("path")
+dotenv.config();
+const dbConnector = require('./config/connect.js');
+const profileRoutes = require("./routes/profileRoutes.js");
 dbConnector();
 
-const app = express();
 const port = process.env.PORT || 3000;
+const app = express();
 const httpServer = createServer(app);
 
-// ===== CORS SETTINGS =====
-const frontendURL = "https://react-chess-lac.vercel.app"; // Your frontend deployed URL
 const corsOptions = {
-  origin: frontendURL,
+  origin: "https://react-chess-lac.vercel.app",
   credentials: true,
 };
+
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
-// ===== ROUTES =====
 app.use("/user", userRoutes);
-app.use("/profile", restrictToLoginUserOnly, profileRoutes);
+app.use('/profile', restrictToLoginUserOnly, profileRoutes);
 
 app.get("/stockfish", async (req, res) => {
   try {
     const apiUrl = "https://stockfish.online/api/s/v2.php";
-    const response = await axios.get(apiUrl, { params: req.query });
-    res.json({ bestMove: response.data.bestmove });
+    const response = await axios.get(apiUrl, {
+      params: req.query
+    });
+    const bestMove = response.data.bestmove;
+    res.json({
+      bestMove: bestMove
+    });
   } catch (error) {
-    res.status(500).send({ message: `Error: ${error.message}` });
+    res.status(500).send(`Error: ${error.message}`);
   }
 });
 
-// ===== SPA Wildcard Route =====
+// Wildcard route for SPA (Single Page Application)
+// This should be the last route to catch all other routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist/index.html"));
 });
 
-// ===== SOCKET.IO =====
 const io = new Server(httpServer, {
   cors: {
-    origin: frontendURL,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+    origin: "https://react-chess-lac.vercel.app",
+  }
 });
 
 let pendingUser = null;
 
-io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
+io.on('connection', (socket) => {
+  console.log(socket);
   const user = JSON.parse(socket.handshake.query.user);
 
   if (pendingUser) {
     const player1 = pendingUser;
     const player2 = socket;
 
-    player1.emit("color", "white");
-    player2.emit("color", "black");
+    player1.emit('color', 'white');
+    player2.emit('color', 'black');
 
-    player1.emit("opponent", user);
-    player2.emit("opponent", JSON.parse(player1.handshake.query.user));
+    player1.emit('opponent', user);
+    player2.emit('opponent', JSON.parse(player1.handshake.query.user));
 
     pendingUser = null;
 
-    player1.on("move", ({ from, to, obtainedPromotion }) => {
-      player2.emit("move", { from, to, obtainedPromotion });
+    player1.on('move', ({ from, to ,obtainedPromotion}) => {
+      player2.emit('move', { from, to ,obtainedPromotion});
     });
 
-    player2.on("move", ({ from, to, obtainedPromotion }) => {
-      player1.emit("move", { from, to, obtainedPromotion });
+    player2.on('move', ({ from, to , obtainedPromotion}) => {
+      player1.emit('move', { from, to, obtainedPromotion });
     });
 
-    player1.on("disconnect", () => {
-      player2.emit("opponentDisconnected");
+    player1.on('disconnect', () => {
+      player2.emit('opponentDisconnected');
     });
 
-    player2.on("disconnect", () => {
-      player1.emit("opponentDisconnected");
+    player2.on('disconnect', () => {
+      player1.emit('opponentDisconnected');
     });
   } else {
     pendingUser = socket;
-    socket.emit("waiting", true);
+    socket.emit('waiting', true);
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       pendingUser = null;
     });
   }
 });
 
-// ===== START SERVER =====
 httpServer.listen(port, () => {
-  console.log(`Server started successfully on port ${port}`);
+  console.log(`Server started at succesfully`);
 });
+
+// // server.js
+// const { createServer } = require("http");
+// const { Server } = require("socket.io");
+// const express = require("express");
+// const cors = require("cors");
+// const dotenv = require("dotenv");
+// const axios = require("axios");
+// const path = require("path");
+// const cookieParser = require("cookie-parser");
+
+// dotenv.config();
+
+// // Import your routes and middleware
+// const userRoutes = require("./routes/userRoutes.js");
+// const profileRoutes = require("./routes/profileRoutes.js");
+// const { restrictToLoginUserOnly } = require("./middlewares/auth.js");
+// const dbConnector = require("./config/connect.js");
+
+// // Connect to database
+// dbConnector();
+
+// const app = express();
+// const port = process.env.PORT || 3000;
+// const httpServer = createServer(app);
+
+// // ===== CORS SETTINGS =====
+// const frontendURL = "https://react-chess-lac.vercel.app"; // Your frontend deployed URL
+// const corsOptions = {
+//   origin: frontendURL,
+//   credentials: true,
+// };
+
+// app.use(cors(corsOptions));
+// app.use(express.json());
+// app.use(cookieParser());
+// app.use(express.static(path.join(__dirname, "/client/dist")));
+
+// // ===== ROUTES =====
+// app.use("/user", userRoutes);
+// app.use("/profile", restrictToLoginUserOnly, profileRoutes);
+
+// app.get("/stockfish", async (req, res) => {
+//   try {
+//     const apiUrl = "https://stockfish.online/api/s/v2.php";
+//     const response = await axios.get(apiUrl, { params: req.query });
+//     res.json({ bestMove: response.data.bestmove });
+//   } catch (error) {
+//     res.status(500).send({ message: `Error: ${error.message}` });
+//   }
+// });
+
+// // ===== SPA Wildcard Route =====
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "/client/dist/index.html"));
+// });
+
+// // ===== SOCKET.IO =====
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: frontendURL,
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   },
+// });
+
+// let pendingUser = null;
+
+// io.on("connection", (socket) => {
+//   console.log("Socket connected:", socket.id);
+//   const user = JSON.parse(socket.handshake.query.user);
+
+//   if (pendingUser) {
+//     const player1 = pendingUser;
+//     const player2 = socket;
+
+//     player1.emit("color", "white");
+//     player2.emit("color", "black");
+
+//     player1.emit("opponent", user);
+//     player2.emit("opponent", JSON.parse(player1.handshake.query.user));
+
+//     pendingUser = null;
+
+//     player1.on("move", ({ from, to, obtainedPromotion }) => {
+//       player2.emit("move", { from, to, obtainedPromotion });
+//     });
+
+//     player2.on("move", ({ from, to, obtainedPromotion }) => {
+//       player1.emit("move", { from, to, obtainedPromotion });
+//     });
+
+//     player1.on("disconnect", () => {
+//       player2.emit("opponentDisconnected");
+//     });
+
+//     player2.on("disconnect", () => {
+//       player1.emit("opponentDisconnected");
+//     });
+//   } else {
+//     pendingUser = socket;
+//     socket.emit("waiting", true);
+
+//     socket.on("disconnect", () => {
+//       pendingUser = null;
+//     });
+//   }
+// });
+
+// // ===== START SERVER =====
+// httpServer.listen(port, () => {
+//   console.log(`Server started successfully on port ${port}`);
+// });
