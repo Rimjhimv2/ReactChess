@@ -29,7 +29,7 @@ const AgainstStockfish = () => {
   const fetchBestMove = async (FEN) => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/stockfish",
+        "https://reactchess-hotm.onrender.com/stockfish",
         {
           params: {
             fen: FEN,
@@ -132,12 +132,12 @@ const AgainstStockfish = () => {
       }
 
       // Play sound based on move type
-      if (move.captured) {
-        captureSound.play();
-      } else {
-        moveSound.play();
-      }
-    };
+    //   if (move.captured) {
+    //     captureSound.play();
+    //   } else {
+    //     moveSound.play();
+    //   }
+    // };
 
     const onMouseoverSquare = (square, piece) => {
       const moves = game.moves({

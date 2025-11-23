@@ -12,7 +12,7 @@ function Navbar() {
     const location = useLocation();
 
     React.useEffect(() => {
-        axios.get("http://localhost:3000/profile", {
+        axios.get("https://reactchess-hotm.onrender.com/profile", {
             withCredentials: true
         })
             .then(res => {

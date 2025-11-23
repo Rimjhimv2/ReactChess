@@ -14,7 +14,7 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     React.useEffect(() => {
-        axios.get("http://localhost:3000/profile", {
+        axios.get("https://reactchess-hotm.onrender.com/profile", {
             withCredentials: true
         })
             .then(res => {
@@ -30,7 +30,7 @@ function Login() {
     const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:3000/user/login', {
+        const response = await fetch('https://reactchess-hotm.onrender.com/user/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
