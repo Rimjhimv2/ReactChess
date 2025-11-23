@@ -25,7 +25,7 @@ const GlobalMultiplayer = () => {
     try {
       console.log("Sending data:", { userId, opponentName, status });
       const response = await axios.post(
-        `http://localhost:3000/user/${userId}/match-history`,
+        `https://reactchess-hotm.onrender.com/user/${userId}/match-history`,
         {
           opponent: opponentName,
           status,
@@ -66,7 +66,7 @@ const GlobalMultiplayer = () => {
   useEffect(() => {
     const newGame = new Chess();
     setGame(newGame);
-    const newSocket = socketIOClient("http://localhost:3000", {
+    const newSocket = socketIOClient("https://reactchess-hotm.onrender.com", {
       query: { user: JSON.stringify(user) },
     });
     setSocket(newSocket);
