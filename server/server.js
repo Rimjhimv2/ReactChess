@@ -131,7 +131,10 @@ const port = process.env.PORT || 3000;
 
 // CORS options for Vercel deployment
 const corsOptions = {
-  origin: "https://react-chess-lac.vercel.app", // React app domain
+  origin: [
+    "https://reactchess-hotm.onrender.com",
+    "https://reactchess.onrender.com"
+  ],//"https://react-chess-lac.vercel.app", // React app domain
   credentials: true,
 };
 
@@ -163,7 +166,11 @@ app.get("*", (req, res) => {
 // Socket.IO setup
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://react-chess-lac.vercel.app",
+     origin: //"https://react-chess-lac.vercel.app",
+    [
+    "https://reactchess-hotm.onrender.com",
+    "https://reactchess.onrender.com"
+  ],
     credentials: true,
   }
 });
