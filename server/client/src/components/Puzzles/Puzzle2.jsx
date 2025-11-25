@@ -32,7 +32,7 @@ const Puzzle2 = () => {
   const fetchBestMove = async (FEN) => {
     try {
       const response = await axios.get(
-        "https://reactchess.onrender.com/stockfish",
+        "http://localhost:3000/stockfish",
         {
           params: {
             fen: FEN,
