@@ -29,7 +29,7 @@ const AgainstStockfish = () => {
   const fetchBestMove = async (FEN) => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/stockfish",
+        "https://reactchess-2mc2.onrender.com/stockfish",
         {
           params: {
             fen: FEN,

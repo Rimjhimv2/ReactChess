@@ -16,7 +16,7 @@ function Profile() {
 
   React.useEffect(() => {
     axios
-      .get("https://reactchess-hotm.onrender.com/profile", {
+      .get("https://reactchess-2mc2.onrender.com/profile", {
         withCredentials: true,
       })
       .then((res) => {

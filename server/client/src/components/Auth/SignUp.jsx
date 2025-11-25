@@ -38,7 +38,7 @@ function SignUp() {
             return;
         }
     
-        const res = await fetch("https://reactchess-hotm.onrender.com/user/register", {
+        const res = await fetch("https://reactchess-2mc2.onrender.com/user/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
