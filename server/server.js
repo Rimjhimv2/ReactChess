@@ -19,7 +19,7 @@ const httpServer = createServer(app);
 
 const corsOptions = {
   origin:  [
-    "react-chess-rho.vercel.app",
+    "https://react-chess-rho.vercel.app",
      "http://localhost:5173",
     "http://localhost:5174"
   ],
@@ -56,15 +56,27 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist/index.html"));
 });
 
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin:  [
+//       "https://react-chess-rho.vercel.app",
+//      "http://localhost:5173",
+//     "http://localhost:5174"
+//   ],
+//   }
+// });
+
 const io = new Server(httpServer, {
   cors: {
-    origin:  [
-      "react-chess-rho.vercel.app",
-     "http://localhost:5173",
-    "http://localhost:5174"
-  ],
+    origin: [
+      "https://react-chess-rho.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:5174"
+    ],
+    credentials: true
   }
 });
+
 
 let pendingUser = null;
 
