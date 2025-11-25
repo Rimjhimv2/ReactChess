@@ -19,6 +19,7 @@ const httpServer = createServer(app);
 
 const corsOptions = {
   origin:  [
+    "https://react-chess-lac.vercel.app",
      "http://localhost:5173",
     "http://localhost:5174"
   ],
@@ -58,6 +59,7 @@ app.get("*", (req, res) => {
 const io = new Server(httpServer, {
   cors: {
     origin:  [
+      "https://react-chess-lac.vercel.app",
      "http://localhost:5173",
     "http://localhost:5174"
   ],
