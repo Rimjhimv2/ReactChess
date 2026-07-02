@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import bgImage from '../../assets/images/bgImage.jpg';
 
@@ -38,7 +38,7 @@ function SignUp() {
             return;
         }
     
-        const res = await fetch("https://reactchess-2mc2.onrender.com/user/register", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/user/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -52,11 +52,12 @@ function SignUp() {
     
         const data = await res.json();
     
-        if (!data) {
-            alert("Invalid data");
-        } else {
-            navigate("/login");
-        }
+       if (res.ok) {
+    alert("Signup Successful");
+    navigate("/login");
+} else {
+    alert(data.error || "Signup Failed");
+}
     };
     
 

@@ -15,10 +15,10 @@ function Profile() {
 
 
   React.useEffect(() => {
-    axios
-      .get("https://reactchess-2mc2.onrender.com/profile", {
-        withCredentials: true,
-      })
+ axios.get(`${import.meta.env.VITE_API_URL}/user/profile`, {
+  withCredentials: true,
+})
+
       .then((res) => {
         const data = res.data;
         dispatch(login(data));

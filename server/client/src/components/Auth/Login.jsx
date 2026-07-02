@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import bgImage from '../../assets/images/bgImage.jpg';
 import PieceArray from '../PieceArray';
-import axios from "axios"
+
 import { login } from '../../store/authSlice';
 function Login() {
     const dispatch = useDispatch();
@@ -33,7 +33,8 @@ function Login() {
     const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('https://reactchess-2mc2.onrender.com/user/login', {
+        const response = await fetch(
+  "http://localhost:3000/user/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -113,7 +114,7 @@ function Login() {
                         </button>
                     </div>
                     <div className="text-center text-lg text-white">
-                        Don't have an account? <Link to="/signup" className="text-purple-300 hover:text-white">Sign Up</Link>
+                        Dont have an account? <Link to="/signup" className="text-purple-300 hover:text-white">Sign Up</Link>
                     </div>
                 </form>
             </div>

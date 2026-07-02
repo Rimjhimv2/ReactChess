@@ -15,10 +15,13 @@ dbConnector();
 
 const port = process.env.PORT || 3000;
 const app = express();
+app.set("trust proxy", 1);
+
 const httpServer = createServer(app);
 
 const corsOptions = {
   origin:  [
+       "https://reactchess-2mc2.onrender.com", 
     "https://react-chess-rho.vercel.app",
      "http://localhost:5173",
     "http://localhost:5174"
@@ -69,6 +72,7 @@ app.get("*", (req, res) => {
 const io = new Server(httpServer, {
   cors: {
     origin: [
+         "https://reactchess-2mc2.onrender.com", 
       "https://react-chess-rho.vercel.app",
       "http://localhost:5173",
       "http://localhost:5174"
